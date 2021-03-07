@@ -10,12 +10,18 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
+
 import java.awt.event.MouseWheelListener;
 import java.awt.Dimension;
 import java.awt.Font;
 
 public class MainWindow {
 
+	/**
+	 *
+	 */
+	private static final String DEFAULT_FONT = "Segoe UI Emoji";
 	private JFrame frame;
 	private JButton calcButton;
 	private static String err = "Error";
@@ -40,8 +46,8 @@ public class MainWindow {
 	 */
 	public void open() {
 		JFrame.setDefaultLookAndFeelDecorated(true); // custom window decoration
-		// com.formdev.flatlaf.intellijthemes.FlatCyanLightIJTheme.install();
-		com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkHardIJTheme.install();
+		 com.formdev.flatlaf.intellijthemes.FlatCyanLightIJTheme.install();
+		//com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkHardIJTheme.install();
 		createContents();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setLocation((screenSize.width - frame.getBounds().width) / 2,
@@ -56,52 +62,54 @@ public class MainWindow {
 	protected void createContents() {
 		frame = new JFrame("Base Modifier");
 		frame.setIconImage((new ImageIcon(MainWindow.class.getClassLoader().getResource("BaseIcon.ico")).getImage()));
-		frame.setSize(450, 260);
+		frame.setSize(435, 250);
 		frame.setLayout(null);
 		frame.setResizable(false);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		JTextField numberString = new JTextField();
 		numberString.setEditable(true);
 		numberString.setToolTipText("Number to modify");
-		numberString.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+		numberString.setFont(new Font(DEFAULT_FONT, Font.PLAIN, 20));
 		numberString.setBounds(98, 28, 270, 32);
 		frame.add(numberString);
 
 		JLabel lblNumber = new JLabel("Number:", SwingConstants.CENTER);
-		// lblNumber.setFont(SWTResourceManager.getFont("Tahoma", 15, SWT.NORMAL));
+		lblNumber.setFont(new Font(DEFAULT_FONT, Font.PLAIN, 17));
+
 		lblNumber.setBounds(10, 33, 82, 24);
 		frame.add(lblNumber);
 
-		JComboBox inputBase = new JComboBox(new String[] { "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
-				"13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
-				"30", "31", "32", "33", "34", "35", "36" });
+		String[] baseArray = new String[35];
+		for (int i = 0; i < baseArray.length; i++)
+			baseArray[i] = String.valueOf(i+2);
+
+		JComboBox<String> inputBase = new JComboBox<>(baseArray);
 		inputBase.setEnabled(true);
 		inputBase.setToolTipText("Original Base");
-		inputBase.setBounds(374, 38, 55, 23);
+		inputBase.setBounds(375, 38, 55, 23);
 		inputBase.addMouseWheelListener(mouseWheelListener);
 		frame.add(inputBase);
 
 		JLabel lblBase = new JLabel("Base:", SwingConstants.CENTER);
-		// lblBase.setFont(SWTResourceManager.getFont("Tahoma", 10, SWT.BOLD));
-		lblBase.setBounds(374, 17, 55, 15);
+		lblBase.setFont(new Font(DEFAULT_FONT, Font.PLAIN, 12));
+		lblBase.setBounds(375, 23, 55, 15);
 		frame.add(lblBase);
 
-		JLabel lblToBase = new JLabel("to base:", SwingConstants.CENTER);
-		// lblToBase.setFont(SWTResourceManager.getFont("Tahoma", 10, SWT.BOLD));
-		lblToBase.setBounds(374, 77, 55, 15);
+		JLabel lblToBase = new JLabel("To Base:", SwingConstants.CENTER);
+		lblToBase.setFont(new Font(DEFAULT_FONT, Font.PLAIN, 12));
+		lblToBase.setBounds(375, 83, 55, 15);
 		frame.add(lblToBase);
 
-		JComboBox outputBase = new JComboBox(new String[] { "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
-				"13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
-				"30", "31", "32", "33", "34", "35", "36" });
+		JComboBox<String> outputBase = new JComboBox<>(baseArray);
 		outputBase.setEnabled(true);
 		outputBase.setToolTipText("Desired Base");
-		outputBase.setBounds(374, 98, 55, 23);
+		outputBase.setBounds(375, 98, 55, 23);
 		outputBase.addMouseWheelListener(mouseWheelListener);
 		frame.add(outputBase);
 
 		JTextField outputString = new JTextField("", SwingConstants.CENTER);
-		outputString.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 23));
+		outputString.setFont(new Font(DEFAULT_FONT, Font.PLAIN, 23));
 		outputString.setHorizontalAlignment(SwingConstants.CENTER);
 		outputString.setEditable(false);
 		outputString.setToolTipText("Answer");
@@ -146,23 +154,24 @@ public class MainWindow {
 			outputString.setText(output);
 		});
 		calcButton.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		calcButton.setBounds(145, 83, 141, 47);
+		calcButton.setBounds(147, 80, 140, 50);
 		frame.add(calcButton);
 
 		JButton infoButton = new JButton("info");
 		infoButton.addActionListener(e -> JOptionPane.showMessageDialog(frame,
 				"Enter valid base (2-36) and valid origin number for that base\n"
 						+ "(Mouse scroll wheel can be used to change base quickly)\n"
-						+ "Program created by: Or Ben Moshe",
+						+ "Program created by: Araxeus",
 				"Instructions", JOptionPane.INFORMATION_MESSAGE));
-		infoButton.setBounds(0, 0, 60, 24);
+		infoButton.setBounds(5, 1, 60, 24);
 		infoButton.setHorizontalAlignment(SwingConstants.LEFT);
 		frame.add(infoButton);
 	}
 
 	MouseWheelListener mouseWheelListener = e -> {
 		int steps = e.getWheelRotation() * -1;
-		JComboBox thisBox = (JComboBox) e.getComponent();
+		//mousewheel listener is bound to JComboBox and will be only from that type
+		JComboBox<String> thisBox = (JComboBox<String>) e.getComponent();
 		int newIndex = thisBox.getSelectedIndex() + steps;
 		if (newIndex < 0)
 			newIndex = 0;
