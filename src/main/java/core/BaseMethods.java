@@ -1,15 +1,15 @@
 package core;
-public class BaseMethods {
+public interface BaseMethods {
 	
 	public static String toUpperCase(String number)
 	{
-		String output="";
+		StringBuilder output = new StringBuilder();
 		for(int i=0;i<number.length();i++)
 			if(isLowerCase(number.charAt(i),36))
-				output+=(char)(number.charAt(i)-32); //IF char is lowercase -> make it uppercase
+				output.append((char)(number.charAt(i)-32)); //IF char is lowercase -> make it uppercase
 			else
-				output+=number.charAt(i);
-		return output;
+				output.append(number.charAt(i));
+		return output.toString();
 	}
 	
 	private static boolean isLowerCase(char ch,int limit) {
@@ -54,10 +54,10 @@ public class BaseMethods {
 		if(num.contains("."))
 		{
 			fraction=getFractionBaseXto10(num.substring(num.indexOf('.')+1, num.length()),base);
-			num=num.substring(0,num.indexOf('.'));
-			
+			num=num.substring(0,num.indexOf('.'));			
 		}
-		long output=0,currentDigit;
+		long output=0;
+		int currentDigit;
 		char currentChar;
 		for (int pos=0;pos<num.length();pos++)
 		{
@@ -99,7 +99,8 @@ public class BaseMethods {
 	{
 		if (base<2 || base>36)
 			return "-1";	
-		String output = "", fraction = "", negative = "";
+		String fraction = "", negative = "";
+		StringBuilder output = new StringBuilder();
 		if (num<0)
 		{
 			num*=-1;
@@ -110,22 +111,22 @@ public class BaseMethods {
 			fraction=getFractionBase10toX(num%1,base);
 			num-=num%1;		
 		}
-		for (int wholeNum=(int)num,currentNum; wholeNum>0; wholeNum/=base)
+		for (int wholeNum=(int)num; wholeNum>0; wholeNum/=base)
 		{
-			currentNum=wholeNum%base;
+			int currentNum=wholeNum%base;
 			if(currentNum>9)
-				output+=(char)(currentNum+55);
+				output.append((char)(currentNum+55));
 			else
-				output+=currentNum;
+				output.append(currentNum);
 		}
-		if(output=="")
-			output="0";
-		return negative+reverseString(output)+fraction;		
+		if(output.isEmpty())
+			output.append("0");
+		return negative + reverseString(output.toString()) + fraction;		
 	}
 	
 	private static String getFractionBase10toX(double num,int base) // 0>num<1 2<=base<=36 PRIVATE
 	{
-		String output = ".";
+		StringBuilder output = new StringBuilder(".");
 		double remainder;
 		int currentNum, digits = 0;
 		do {
@@ -134,21 +135,21 @@ public class BaseMethods {
 				remainder=0;
 			currentNum=(int)Math.ceil((num*base)-remainder);
 			if (currentNum>9)
-				output+=(char)(currentNum+55);
+				output.append((char)(currentNum+55));
 			else
-				output+=currentNum;
+				output.append(currentNum);
 			num=remainder;
 			digits++;
 		}
 		while(num!=0 && digits<8);
-		return output;		
+		return output.toString();		
 	}
 	
-	private static String reverseString(String reversableString)
+	private static String reverseString(String input)
 	{
-		String output = "";
-		for(int j=reversableString.length()-1; j>=0; j--) // create new String and add 'charAt' to it starting from the end of this.sentence
-			output+=reversableString.charAt(j);
-		return output;
-	}
+		StringBuilder output = new StringBuilder();
+		for(int j=input.length()-1; j>=0; j--) // create new String and add 'charAt' to it starting from the end of this.sentence
+			output.append(input.charAt(j));
+		return output.toString();
+	}	
 }

@@ -27,11 +27,7 @@ public class MainWindow {
 	private static String err = "Error";
 	private static String msg = " is invalid, please try again";
 
-	/**
-	 * Launch the application.
-	 * 
-	 * @param args
-	 */
+
 	public static void main(String[] args) {
 		try {
 			MainWindow window = new MainWindow();
@@ -127,25 +123,24 @@ public class MainWindow {
 				ogBase = Integer.valueOf((String) inputBase.getSelectedItem());
 				if (ogBase < 0 || ogBase > 36)
 					throw new Exception();
-			} catch (Exception Exception) {
+			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(frame, "Input base" + msg, err, JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			try {
-				number = numberString.getText();
+				number = BaseMethods.toUpperCase(numberString.getText());
 				if (!BaseMethods.isValidString(number, ogBase))
 					throw new Exception();
-			} catch (Exception Exception) {
+			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(frame, "Input number" + msg, err, JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			number = BaseMethods.toUpperCase(number);
 			numberString.setText(number);
 			try {
 				resultBase = Integer.valueOf((String) outputBase.getSelectedItem());
 				if (resultBase < 0 || resultBase > 36 || resultBase == ogBase)
 					throw new Exception();
-			} catch (Exception Exception) {
+			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(frame, "Output base" + msg, err, JOptionPane.ERROR_MESSAGE);
 				return;
 			}
@@ -170,7 +165,7 @@ public class MainWindow {
 
 	MouseWheelListener mouseWheelListener = e -> {
 		int steps = e.getWheelRotation() * -1;
-		//mousewheel listener is bound to JComboBox and will be only from that type
+		//MouseWheel listener is bound to JComboBox and will be only from that type
 		JComboBox<String> thisBox = (JComboBox<String>) e.getComponent();
 		int newIndex = thisBox.getSelectedIndex() + steps;
 		if (newIndex < 0)
